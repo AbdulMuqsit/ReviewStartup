@@ -1,0 +1,191 @@
+﻿@using System.Drawing
+@model ReviewStartup.Controllers.PostSummaryViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+    ViewBag.BaseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+}
+
+<div class="jumbotron">
+    <img src="https://placeholdit.imgix.net/~text?txtsize=75&txt=Media+Trend+Details+To+Be+Implemented+Here&w=1000&h=300" height="300" alt="banner" />
+</div>
+<div class="featured-content row">
+    <div class="media-group col-xs-6 col-sm-4 col-md-4 col-lg-3">
+
+
+        <h2>Movies</h2>
+        @{
+            var rand = new Random();
+            foreach (var movie in Model.Movies)
+            {
+                var source = string.Empty;
+                if (movie.Thumbnail?.Length > 0)
+                {
+                    source = ViewBag.BaseUrl + "/Images/" + movie.Id + "/Thumbnainl";
+                }
+                else
+                {
+                    var color = Color.FromArgb(rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
+                    source = "http://placeskull.com/50/50/" + ColorTranslator.ToHtml(color).Substring(1) + "/" + rand.Next(1, 45);
+                }
+
+                <div class="row">
+                    <img src=@source alt="image">
+                    <div>
+                        <span class="row">@movie.Title</span>
+                        @{
+                            var _class =
+                            String.Empty;
+                            if (@movie.AverageScore > 7)
+                            {
+                                _class = "good-review";
+                            }
+                            else if (@movie.AverageScore > 5)
+                            {
+                                _class = "average-review";
+                            }
+                            else
+                            {
+                                _class = "bad-review";
+                            }
+                            <span class="row @_class">@movie.AverageScore.ToString("F1")</span>
+                        }
+                    </div>
+                </div>
+            }
+        }
+
+    </div>
+    <div class="media-group col-xs-6 col-sm-4 col-md-4 col-lg-3">
+        <h2>Tv Shows</h2>
+
+        @{
+
+            foreach (var tvShow in Model.TvShow)
+            {
+                var source = string.Empty;
+                if (tvShow.Thumbnail?.Length > 0)
+                {
+                    source = ViewBag.BaseUrl + "/Images/" + tvShow.Id + "/Thumbnainl";
+                }
+                else
+                {
+                    var color = Color.FromArgb(rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
+                    source = "http://placeskull.com/50/50/" + ColorTranslator.ToHtml(color).Substring(1) + "/" + rand.Next(1, 45);
+                }
+
+                <div class="row">
+                    <img src=@source alt="image">
+                    <div>
+                        <span class="row">@tvShow.Title</span>
+                        @{
+                            var _class =
+                            String.Empty;
+                            if (@tvShow.AverageScore > 7)
+                            {
+                                _class = "good-review";
+                            }
+                            else if (@tvShow.AverageScore > 5)
+                            {
+                                _class = "average-review";
+                            }
+                            else
+                            {
+                                _class = "bad-review";
+                            }
+                            <span class="row @_class">@tvShow.AverageScore.ToString("F1")</span>
+                        }
+                    </div>
+                </div>
+                            }
+        }
+    </div>
+    <div class="media-group col-xs-6 col-sm-4 col-md-4 col-lg-3">
+        <h2>Games</h2>
+
+        @{
+
+            foreach (var game in Model.VideoGames)
+            {
+                var source = string.Empty;
+                if (game.Thumbnail?.Length > 0)
+                {
+                    source = ViewBag.BaseUrl + "/Images/" + game.Id + "/Thumbnainl";
+                }
+                else
+                {
+                    var color = Color.FromArgb(rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
+                    source = "http://placeskull.com/50/50/" + ColorTranslator.ToHtml(color).Substring(1) + "/" + rand.Next(1, 45);
+                }
+
+                <div class="row">
+                    <img src=@source alt="image">
+                    <div>
+                        <span class="row">@game.Title</span>
+                        @{
+                            var _class =
+                            String.Empty;
+                            if (@game.AverageScore > 7)
+                            {
+                                _class = "good-review";
+                            }
+                            else if (@game.AverageScore > 5)
+                            {
+                                _class = "average-review";
+                            }
+                            else
+                            {
+                                _class = "bad-review";
+                            }
+                            <span class="row @_class">@game.AverageScore.ToString("F1")</span>
+                        }
+                    </div>
+                </div>
+                            }
+        }
+    </div>
+    <div class="media-group col-xs-6 col-sm-4 col-md-4 col-lg-3">
+        <h2>Music</h2>
+
+        @{
+
+            foreach (var music in Model.Music)
+            {
+                var source = string.Empty;
+                if (music.Thumbnail?.Length > 0)
+                {
+                    source = ViewBag.BaseUrl + "/Images/" + music.Id + "/Thumbnainl";
+                }
+                else
+                {
+                    var color = Color.FromArgb(rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
+                    source = "http://placeskull.com/50/50/" + ColorTranslator.ToHtml(color).Substring(1) + "/" + rand.Next(1, 45);
+                }
+
+                <div class="row">
+                    <img src=@source alt="image">
+                    <div>
+                        <span class="row">@music.Title</span>
+                        @{
+                            var _class =
+                            String.Empty;
+                            if (@music.AverageScore > 7)
+                            {
+                                _class = "good-review";
+                            }
+                            else if (@music.AverageScore > 5)
+                            {
+                                _class = "average-review";
+                            }
+                            else
+                            {
+                                _class = "bad-review";
+                            }
+                            <span class="row @_class">@music.AverageScore.ToString("F1")</span>
+                        }
+                    </div>
+                </div>
+                            }
+        }
+    </div>
+</div>
