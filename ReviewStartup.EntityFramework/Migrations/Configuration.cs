@@ -62,12 +62,10 @@ namespace ReviewStartup.EntityFramework.Migrations
                     {
                         Title = Ipsum.GetPhrase(rand.Next(1, 6)),
                         Type = (MediaType?)rand.Next(0, 4),
-                        Ratings = rand.NextDouble(),
                         Reviews = reviews,
                         Summary = Ipsum.GetPhrase(rand.Next(5, 20)),
                         UserId = user.Id,
                         AverageScore = averageScore,
-                        MarkText = averageScore < 5 ? Ipsum.GetInsult() : Ipsum.GetPraise(),
 
 
                     });

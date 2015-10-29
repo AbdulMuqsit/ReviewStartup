@@ -1,0 +1,95 @@
+﻿@using System.Drawing
+@model ReviewStartup.Controllers.MediaPostDetailsViewModel
+
+@{
+    ViewBag.Title = Model.Post.Title;
+}
+
+<div class="row post">
+
+
+    <div class="col-lg-4">
+
+        @if (Model.Post.Thumbnail?.Length > 0)
+        {
+
+            <div>
+                <img class="thumb" src="@Url.Action("Thumbnail", "Images", new {id = Model.Post.Id})" />
+            </div>
+        }
+        else
+        {
+            Random rand = new Random();
+            var color = Color.FromArgb(rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
+            var soruce = "http://placeskull.com/300/400/" + ColorTranslator.ToHtml(color).Substring(1) + "/" + rand.Next(1, 45);
+            <img class="thumb" src="@soruce" />
+        }
+    </div>
+    <div class="col-lg-8">
+        <h2 class="row">@Model.Post.Title</h2>
+
+        @{
+            var _class =
+            String.Empty;
+            if (Model.Post.AverageScore > 7)
+            {
+                _class = "good-review";
+            }
+            else if (Model.Post.AverageScore > 5)
+            {
+                _class = "average-review";
+            }
+            else
+            {
+                _class = "bad-review";
+            }
+            <span class="row @_class">@Model.Post.AverageScore.ToString("F1")</span>
+        }
+
+
+    </div>
+
+</div>
+<hr />
+<div class="container">
+    <h2 class="row">Reviews</h2>
+    @foreach (var review in Model.Reviews)
+    {
+        <div class="row review col-lg-8 col-md-8">
+            <div class="row">
+                <h4 class="col-lg-10 col-sm-10">@review.Title</h4>
+                <a>@review.User.UserName</a>
+            </div>
+            @{
+
+
+                if (review.Ratings > 7)
+                {
+                    _class = "good-review";
+                }
+                else if (review.Ratings > 5)
+                {
+                    _class = "average-review";
+                }
+                else
+                {
+                    _class = "bad-review";
+                }
+                <span class="row @_class">@review.Ratings.ToString("F1")</span>
+            }
+            <p class="row col-lg-12 col-sm-12">@review.Text</p>
+        </div>
+                }
+</div>
+<hr />
+
+    <div class="container">
+        <h2 class="row">Add your own review</h2>
+        <div class="row">
+            @{
+                Html.RenderAction("CreateReview", "Reviews", routeValues: new { id = Model.Post.Id });
+            }
+        </div>
+    </div>
+
+ 

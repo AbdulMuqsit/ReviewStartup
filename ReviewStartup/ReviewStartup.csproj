@@ -171,9 +171,13 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
+    <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImagesController.cs" />
     <Compile Include="Controllers\IRepository.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MediaPostsController.cs" />
+    <Compile Include="Controllers\ReviewsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -249,9 +253,21 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <None Include="Views\Admin\Login.cshtml" />
     <None Include="Views\Admin\Register.cshtml" />
+    <Content Include="Views\MediaPosts\Create.cshtml" />
+    <Content Include="Views\MediaPosts\Delete.cshtml" />
+    <Content Include="Views\MediaPosts\Details.cshtml" />
+    <Content Include="Views\MediaPosts\Edit.cshtml" />
+    <Content Include="Views\MediaPosts\Index.cshtml" />
+    <Content Include="Views\Reviews\CreateReview.cshtml" />
+    <Content Include="Views\Reviews\Delete.cshtml" />
+    <Content Include="Views\Reviews\Details.cshtml" />
+    <Content Include="Views\Reviews\Edit.cshtml" />
+    <Content Include="Views\Reviews\Index.cshtml" />
+    <Content Include="Views\ControlPanel\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Images\" />
     <Folder Include="Views\MediaPost\" />
   </ItemGroup>
   <ItemGroup>

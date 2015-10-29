@@ -17,7 +17,6 @@ namespace ReviewStartup.Controllers
         Task<List<T>> AllAsync();
         Task<T> GetAsync(int id);
         Task<int> AddAsync(T entity);
-        Task<T> GetAsync<TK>(TK contactDetailsId);
         Task<int> Update(T entity);
         int Count(Func<T, bool> pradicate);
     }
@@ -55,7 +54,7 @@ namespace ReviewStartup.Controllers
 
         public Task<T> GetAsync(int id)
         {
-            throw new NotImplementedException();
+            return Context.Set<T>().FindAsync(id);
         }
 
         public Task<int> AddAsync(T entity)
@@ -63,10 +62,7 @@ namespace ReviewStartup.Controllers
             throw new NotImplementedException();
         }
 
-        public Task<T> GetAsync<TK>(TK contactDetailsId)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public Task<int> Update(T entity)
         {

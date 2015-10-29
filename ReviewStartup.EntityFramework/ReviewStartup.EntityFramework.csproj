@@ -69,6 +69,10 @@
     <Compile Include="Migrations\201510272022453_Text.Designer.cs">
       <DependentUpon>201510272022453_Text.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510281905489_MediaPostChanged.cs" />
+    <Compile Include="Migrations\201510281905489_MediaPostChanged.Designer.cs">
+      <DependentUpon>201510281905489_MediaPostChanged.cs</DependentUpon>
+    </Compile>
     <Compile Include="ReviewsStartupDbContext.cs" />
     <Compile Include="Migrations\201510221526087_Init.cs" />
     <Compile Include="Migrations\201510221526087_Init.Designer.cs">
@@ -100,6 +104,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510272022453_Text.resx">
       <DependentUpon>201510272022453_Text.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510281905489_MediaPostChanged.resx">
+      <DependentUpon>201510281905489_MediaPostChanged.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

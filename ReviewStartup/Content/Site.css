@@ -38,11 +38,16 @@ textarea {
     input:focus,
     select:focus,
     textarea:focus {
-        background: #f1f1f1;
         border-color: #DCE775;
-        max-width: 280px;
+        background: #f1f1f1;
         outline: #DCE775;
     }
+
+textarea {
+    background: white;
+    min-height: 100px;
+    width: 280px;
+}
 
 .navbar-inverse {
     -ms-box-shadow: 0 2px 2px 2px #CCCCCC;
@@ -78,7 +83,6 @@ h2 {
     }
 
 .media-group > div {
-    
     background: #ececec;
     cursor: default;
     height: 60px;
@@ -86,7 +90,7 @@ h2 {
     position: relative;
     width: 210px;
     padding: 5px;
-    border-bottom: 1px solid lightgray; 
+    border-bottom: 1px solid lightgray;
 }
 
     /*.media-group > div:hover {
@@ -122,17 +126,22 @@ h2 {
         z-index: 1;
     }
 
-        .media-group > div > div > span:nth-child(1) {
+        .media-group > div > div > a {
             font-size: 12px;
             font-weight: bold;
             left: 5px;
             margin: 0;
-
+            text-decoration: none;
+            color: gray;
             cursor: pointer;
             position: absolute;
             top: 2px;
             width: 150px;
         }
+
+            .media-group > div > div > a:hover {
+                text-decoration: underline;
+            }
 
 .good-review {
     background: rgba(32, 194, 8, 0.4);
@@ -181,4 +190,27 @@ h2 {
     border-right: 1px solid #eaeaea;
     margin: 0 5px 0 0;
     width: 280px;
+}
+
+.thumb {
+    height: 400px;
+    width: 300px;
+}
+
+.review {
+    background: #eeeeee;
+    border-bottom: 1px solid lightgray;
+}
+
+    .review a {
+        position: absolute;
+        right: 0;
+    }
+
+.post .bad-review,
+.post .average-review,
+.post .good-review {
+    left: 0;
+    margin-bottom: -5px;
+   
 }

@@ -22,23 +22,17 @@ namespace ReviewStartup.Infrastructure.Entities
         [MaxLength(150, ErrorMessage = "Summary be 150 characters maximum")]
         public string Summary { get; set; }
 
-        [Range(0, 10)]
-        public double? Ratings { get; set; }
-
+      
 
         [ForeignKey("UserId")]
         public User User { get; set; }
 
         public byte[] Thumbnail { get; set; }
-
-        [Range(0, 10)]
+        [Range(0.0,10.0)]
         public double AverageScore { get; set; }
 
         public string UserId { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
 
-        [MinLength(3, ErrorMessage = "Summary needs atleast 3 characters")]
-        [MaxLength(150, ErrorMessage = "Summary be 150 characters maximum")]
-        public string MarkText { get; set; }
     }
 }

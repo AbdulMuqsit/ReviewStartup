@@ -78,7 +78,7 @@ namespace ReviewStartup.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
-                    await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Admin"));
+                   var ide= await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Admin"));
 
                     return RedirectToAction("Index", "Home");
                 }
