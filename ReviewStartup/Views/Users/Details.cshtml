@@ -1,0 +1,28 @@
+﻿@using System.Drawing
+@model ReviewStartup.Infrastructure.Entities.User
+
+@{
+    ViewBag.Title = Model.UserName;
+}
+
+<div class="row post">
+
+
+    <div class="col-lg-4">
+
+        @if (Model.Picture?.Length > 0)
+        {
+
+                <img class="thumb" src="@Url.Action("UserThumbnail", "Images", new {userName = Model.UserName})" />
+        }
+        else
+        {
+            <img class="thumb" src="../../Resources/placeholder.jpg" />
+        }
+    </div>
+    <div class="col-lg-8">
+        <h2 class="row">@Model.UserName</h2>
+
+    </div>
+
+</div>

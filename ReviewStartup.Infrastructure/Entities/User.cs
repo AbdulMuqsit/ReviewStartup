@@ -16,7 +16,10 @@ namespace ReviewStartup.Infrastructure.Entities
             return userIdentity;
         }
 
+        public byte[] Picture { get; set; }
         public ICollection<MediaPost> MediaPosts { get; set; }
         public ICollection<Review> Reviews { get; set; }
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
     }
 }

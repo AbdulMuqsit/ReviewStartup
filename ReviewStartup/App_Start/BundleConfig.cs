@@ -22,7 +22,10 @@ namespace ReviewStartup
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
-
+            bundles.Add(new ScriptBundle("~/bundles/App/Pictures").Include(
+                     "~/Scripts/App/picture.js"));
+            bundles.Add(new ScriptBundle("~/bundles/App").Include(
+                    "~/Scripts/App/search.js"));
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));

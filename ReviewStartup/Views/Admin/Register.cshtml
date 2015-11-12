@@ -11,24 +11,51 @@
     <h4>Create a new account.</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
+    <input type="submit" class="btn btn-default" value="Register" style="overflow: visible !important; height: 0 !important; width: 0 !important; margin: 0 !important; border: 0 !important; padding: 0 !important; display: block !important;" />
     <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.Picture, new { @class = "form-control", placeholder = "Display Picture", type = "file", accept = "image/*", id = "picture" })
+
+            <img id="pictureDispalay" src="../../Resources/placeholder.jpg" alt="Chose Display Picture..." />
+            <button id="chosePicture">Chose picture</button>
         </div>
+        @Html.ValidationMessageFor(m => m.Picture, "", new { @class = "text-danger" })
+
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "User Name" })
         </div>
+        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+
+
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
+        </div>
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+
+
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        <div class="col-md-4">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
         </div>
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+
+
     </div>
+    <div class="form-group">
+        <div class="col-md-4">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm Password" })
+        </div>
+        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+
+
+    </div>
+
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" class="btn btn-default" value="Register" />
@@ -38,4 +65,7 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/App/Pictures")
+
+
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace ReviewStartup.Models
 {
@@ -49,8 +50,7 @@ namespace ReviewStartup.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
+        [Display(Name = "Email / User Name")]
         public string Email { get; set; }
 
         [Required]
@@ -64,11 +64,18 @@ namespace ReviewStartup.Models
 
     public class RegisterViewModel
     {
+        [Display(Name = "Picture")]
+        public HttpPostedFileBase Picture { get; set; }
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+        [Required]
+        [Display(Name = "User Name")]
+        [MinLength(4, ErrorMessage = "{0} must be atleaset {1} characters long")]
+        [MaxLength(15, ErrorMessage = "{0} can be at most {1} characters long")]
 
+        public string UserName { get; set; }
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]

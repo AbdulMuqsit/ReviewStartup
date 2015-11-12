@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace ReviewStartup.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -35,9 +36,9 @@ namespace ReviewStartup.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -58,6 +59,8 @@ namespace ReviewStartup.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if (Request.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -69,6 +72,8 @@ namespace ReviewStartup.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            if (Request.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -121,7 +126,7 @@ namespace ReviewStartup.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -140,6 +145,8 @@ namespace ReviewStartup.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            if (Request.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
             return View();
         }
 
@@ -150,20 +157,31 @@ namespace ReviewStartup.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            if (Request.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = model.Email, Email = model.Email };
+                var user = new User { UserName = model.UserName, Email = model.Email };
+                if (model.Picture != null)
+                {
+                    using (var stream = model.Picture.InputStream)
+                    {
+                        var memoryStream = stream as MemoryStream;
+
+                        if (memoryStream == null)
+                        {
+                            memoryStream = new MemoryStream();
+                            await stream.CopyToAsync(memoryStream);
+                        }
+                        user.Picture = memoryStream.ToArray();
+                    }
+                }
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "User"));
 
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
@@ -404,25 +422,7 @@ namespace ReviewStartup.Controllers
             return View();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_userManager != null)
-                {
-                    _userManager.Dispose();
-                    _userManager = null;
-                }
 
-                if (_signInManager != null)
-                {
-                    _signInManager.Dispose();
-                    _signInManager = null;
-                }
-            }
-
-            base.Dispose(disposing);
-        }
 
         #region Helpers
         // Used for XSRF protection when adding external logins

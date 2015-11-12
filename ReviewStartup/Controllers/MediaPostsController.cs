@@ -34,7 +34,8 @@ namespace ReviewStartup.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return Content("Id is neccessary to get the details of a post.");
             }
             var post = await Context.MediaPosts.Include(e => e.Reviews.Select(k => k.User)).Include(e => e.User).Where(e => e.Id == id.Value).FirstOrDefaultAsync();
             if (post == null)
@@ -47,6 +48,11 @@ namespace ReviewStartup.Controllers
                 Reviews = post.Reviews.ToList()
             };
 
+            if (true)
+            {
+                var userId = User.Identity.GetUserId();
+                ViewBag.CanReview = !await Context.Reviews.AnyAsync(rev => rev.UserId == userId && rev.MediaPostId == post.Id);
+            }
             return View(model);
         }
 

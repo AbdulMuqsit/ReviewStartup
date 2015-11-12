@@ -13,16 +13,32 @@ namespace ReviewStartup.Controllers
     {
         [HttpGet]
         // GET: Images
-        public async Task<ActionResult> Thumbnail(int? id)
+        [Route("Images/PostThumbnail/{id}")]
+        public async Task<ActionResult> Thumbnail(int id)
         {
-            if (id == null)
+
+            var post = await Repository.MediaPosts.GetAsync(id);
+            if (post == null)
             {
                 return HttpNotFound();
             }
-            var post = await Repository.MediaPosts.GetAsync(id.Value);
-
 
             return File(post.Thumbnail, "image/png");
+
+
+        }
+        [HttpGet]
+        [Route("Images/UserThumbnail/{userName}")]
+        public async Task<ActionResult> UserThumbnail(string userName)
+        {
+
+            var user = await UserManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            return File(user.Picture, "image/png");
 
 
         }

@@ -31,15 +31,21 @@ input,
 select,
 textarea {
     background: #f1f1f1;
+    height: 40px !important;
     max-width: 280px;
 }
+
+    input[type="checkbox"] {
+        height: 20px !important;
+        margin: 0 !important;
+    }
 
     .form-control:focus,
     input:focus,
     select:focus,
     textarea:focus {
-        border-color: #DCE775;
         background: #f1f1f1;
+        border-color: #DCE775;
         outline: #DCE775;
     }
 
@@ -54,17 +60,63 @@ textarea {
     -webkit-box-shadow: 0 2px 2px 2px #CCCCCC;
     background: #CDDC39;
     border: 0;
+    height: 50px;
     box-shadow: 0 2px 2px 2px #CCCCCC;
+    -moz-min-width: 1200px;
+    -ms-min-width: 1200px;
+    -o-min-width: 1200px;
+    -webkit-min-width: 1200px;
+    min-width: 1200px;
 }
 
-    .navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav li a {
-        color: #111111;
+    .navbar-inverse .navbar-brand {
+        color: #555555;
+        position: fixed;
+        left: 100px;
+        font-size: 20px;
     }
 
-#brand, .navbar-brand {
-    float: none;
-    margin: auto;
-    position: fixed;
+        .navbar-inverse .navbar-brand:hover {
+            color: #666666;
+            font-size: 20px;
+        }
+
+
+    .navbar-inverse .navbar-nav li {
+        color: #666666;
+        cursor: pointer;
+        font-size: 17px;
+    }
+
+        .navbar-inverse .navbar-nav li:hover {
+            color: #555555;
+            background: #C0CA33;
+        }
+
+
+        .navbar-inverse .navbar-nav li a {
+            color: #666666;
+        }
+
+            .navbar-inverse .navbar-nav li a:hover {
+                color: #555555;
+                background: #C0CA33;
+            }
+
+.navbar-collapse.collapse {
+    display: block !important;
+}
+
+.navbar-nav > li, .navbar-nav {
+    float: left !important;
+}
+
+    .navbar-nav.navbar-right:last-child {
+        margin-right: -15px !important;
+    }
+
+.navbar-right {
+    float: right !important;
 }
 
 input[type=submit] {
@@ -84,26 +136,26 @@ h2 {
 
 .media-group > div {
     background: #ececec;
+    border-bottom: 1px solid lightgray;
     cursor: default;
     height: 60px;
     margin: 0 0 0 20px;
+    padding: 5px;
     position: relative;
     width: 210px;
-    padding: 5px;
-    border-bottom: 1px solid lightgray;
 }
 
     /*.media-group > div:hover {
-        background: #ffffff;
-        border: 1px solid #CDDC39;
-    }
+		background: #ffffff;
+		border: 1px solid #CDDC39;
+	}
 
-    .media-group > div:active {
-        border: none;
-        border: none;
-        box-shadow: none;
-        box-shadow: none;
-    }*/
+	.media-group > div:active {
+		border: none;
+		border: none;
+		box-shadow: none;
+		box-shadow: none;
+	}*/
 
     .media-group > div > img {
         border-right: 1px solid lightgray;
@@ -127,14 +179,14 @@ h2 {
     }
 
         .media-group > div > div > a {
+            color: gray;
+            cursor: pointer;
             font-size: 12px;
             font-weight: bold;
             left: 5px;
             margin: 0;
-            text-decoration: none;
-            color: gray;
-            cursor: pointer;
             position: absolute;
+            text-decoration: none;
             top: 2px;
             width: 150px;
         }
@@ -212,5 +264,172 @@ h2 {
 .post .good-review {
     left: 0;
     margin-bottom: -5px;
-   
 }
+
+
+#picture {
+    height: 0;
+    overflow: hidden;
+    visibility: collapse;
+    width: 0;
+}
+
+#pictureDispalay {
+    border: 1px solid lightgray;
+    height: 100px;
+    left: 0;
+    top: 0;
+    width: 100px;
+}
+
+#chosePicture {
+    background: #000000;
+    background: rgba(0, 0, 0, 0.56);
+    border: none;
+    color: white;
+    height: 20px;
+    left: 15px;
+    position: absolute;
+    text-decoration: underline;
+    top: 20px;
+    width: 100px;
+}
+
+.personal-info > div {
+    background: rgb(238, 237, 237);
+    border-bottom: 1px solid lightgray;
+    font-size: 17px;
+}
+
+.personal-info span {
+    margin-top: 10px;
+}
+
+.personal-info img {
+    border: 1px solid gray;
+    height: 150px;
+    margin-bottom: 20px;
+    padding: 5px;
+    width: 150px;
+}
+
+.dropdown {
+    border-left: 1px solid #555555;
+    margin: 5px;
+    padding-left: 10px !important;
+    height: 40px;
+}
+
+    .dropdown:hover {
+        background: #CDDC39 !important;
+    }
+
+    .dropdown > a {
+        background: #CDDC39 !important;
+        color: #555555 !important;
+        padding: 5px 5px 5px 0 !important;
+    }
+
+        .dropdown > a:hover {
+            background: #C0CA33 !important;
+        }
+
+    .dropdown span {
+        margin-left: 5px;
+    }
+
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a:hover,
+.navbar-inverse .navbar-nav > .open > a:focus {
+    background-color: #9E9D24 !important;
+}
+
+.dropdown-menu > li > a {
+    background: white !important;
+    color: #555555 !important;
+}
+
+    .dropdown-menu > li > a:hover {
+        background: #CDDC39 !important;
+        color: #666666 !important;
+    }
+
+.displayThumbnail {
+    height: 30px;
+    width: 30px;
+    border: none;
+    margin: 0;
+    padding: 0;
+    margin-right: 5px;
+    -ms-border-radius: 15px;
+    border-radius: 15px;
+}
+
+#search {
+    max-width: 400px;
+    width: 400px;
+    margin-top: 5px;
+    background: #fafafa;
+    padding: 3px;
+    position: fixed;
+    left: 300px;
+    top: 0!important;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#searchResults {
+    float: left;
+    position: fixed;
+}
+
+.searchResults {
+    background: white;
+    top: 45px;
+    left: 302px;
+    width: 395px;
+    -ms-border-bottom-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    -ms-border-bottom-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.43);
+}
+
+    .searchResults div {
+        background: white;
+        position: relative;
+        height: 60px;
+        border-bottom: 1px solid #eeeeee;
+        position: relative;
+    }
+
+    .searchResults a:last-child div {
+        -ms-border-bottom-left-radius: 15px;
+        border-bottom-left-radius: 15px;
+        -ms-border-bottom-right-radius: 15px;
+        border-bottom-right-radius: 15px;
+    }
+
+    .searchResults a {
+        text-decoration: none;
+        color: #555555;
+    }
+
+    .searchResults div:hover {
+        background: rgb(254, 247, 191);
+    }
+
+    .searchResults > a:hover {
+        background: rgb(254, 247, 191);
+    }
+
+    .searchResults img {
+        width: 40px;
+        height: 50px;
+        margin: 5px;
+    }
+
+    .searchResults span {
+        top: 5px;
+        left: 55px;
+    }

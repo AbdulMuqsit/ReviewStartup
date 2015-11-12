@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -18,67 +19,52 @@ namespace ReviewStartup.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+
             if (!Request.IsLocal)
             {
                 return new HttpUnauthorizedResult("Not Authorized");
             }
+            if (Request.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
             return View();
         }
 
 
-        //
-        // GET: /Account/Login
-        [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
-        {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
-            }
-        }
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+
             if (!Request.IsLocal)
             {
                 return new HttpUnauthorizedResult("Not Authorized");
             }
+            if (Request.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = model.Email, Email = model.Email };
+                var user = new User { UserName = model.UserName, Email = model.Email };
+                if (model.Picture != null)
+                {
+                    using (var stream = model.Picture.InputStream)
+                    {
+                        var memoryStream = stream as MemoryStream;
+
+                        if (memoryStream == null)
+                        {
+                            memoryStream = new MemoryStream();
+                            await stream.CopyToAsync(memoryStream);
+                        }
+                        user.Picture = memoryStream.ToArray();
+                    }
+                }
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Admin"));
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
-                   var ide= await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Admin"));
 
                     return RedirectToAction("Index", "Home");
                 }

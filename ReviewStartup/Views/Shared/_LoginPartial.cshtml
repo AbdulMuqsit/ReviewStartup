@@ -6,19 +6,40 @@
         @Html.AntiForgeryToken()
 
         <ul class="nav navbar-nav navbar-right">
-            <li>
-                @if (User.IsInRole("Admin"))
-                {
+            @if (User.IsInRole("Admin"))
+            {
+                <li>
+
+
                     @Html.ActionLink("Control Panel", "Index", "ControlPanel", routeValues: null, htmlAttributes: new { title = "Manage" })
-                }
-                else
-                {
 
-                    @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                </li>           
+            }
+           
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        <span>
+                            @if (ViewBag.Picture != null)
+                        {
+                                <img class="displayThumbnail" src="data:image/jpeg;base64, @ViewBag.Picture" />
+                        }
+                        else
+                        {
+                                <img class="displayThumbnail" src="../../Resources/placeholder.jpg" />
+                        }
+                        </span>@User.Identity.GetUserName()<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="@Url.Action("Index", "Manage")">Account Settings</a>
+                        </li>
+                        <li role="separator" class="divider"></li>
 
-                }
-            </li>
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+
+                    </ul>
+                </li>
+          
         </ul>
     }
 }

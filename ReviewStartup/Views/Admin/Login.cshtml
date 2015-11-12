@@ -15,17 +15,15 @@
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
                     <div class="col-md-10">
                         @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger", placeholder="Email" })
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
                     <div class="col-md-10">
                         @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger", placeholder="password" })
                     </div>
                 </div>
                 <div class="form-group">
@@ -44,9 +42,9 @@
                 <p>
                     @Html.ActionLink("Register as a new user", "Register")
                 </p>
-                <p>
+                @*<p>
                     @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                </p>
+                </p>*@
             }
         </section>
     </div>

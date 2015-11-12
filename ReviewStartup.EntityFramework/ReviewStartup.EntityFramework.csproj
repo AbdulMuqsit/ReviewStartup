@@ -73,6 +73,14 @@
     <Compile Include="Migrations\201510281905489_MediaPostChanged.Designer.cs">
       <DependentUpon>201510281905489_MediaPostChanged.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511031017055_UserPicture.cs" />
+    <Compile Include="Migrations\201511031017055_UserPicture.Designer.cs">
+      <DependentUpon>201511031017055_UserPicture.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511031252287_UserFirstLastName.cs" />
+    <Compile Include="Migrations\201511031252287_UserFirstLastName.Designer.cs">
+      <DependentUpon>201511031252287_UserFirstLastName.cs</DependentUpon>
+    </Compile>
     <Compile Include="ReviewsStartupDbContext.cs" />
     <Compile Include="Migrations\201510221526087_Init.cs" />
     <Compile Include="Migrations\201510221526087_Init.Designer.cs">
@@ -107,6 +115,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510281905489_MediaPostChanged.resx">
       <DependentUpon>201510281905489_MediaPostChanged.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511031017055_UserPicture.resx">
+      <DependentUpon>201511031017055_UserPicture.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511031252287_UserFirstLastName.resx">
+      <DependentUpon>201511031252287_UserFirstLastName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

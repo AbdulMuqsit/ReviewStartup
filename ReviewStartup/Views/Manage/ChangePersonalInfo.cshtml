@@ -1,0 +1,58 @@
+﻿@model ReviewStartup.Controllers.ChangePersonalInfoViewModel
+
+@{
+    ViewBag.Title = "Mangae Personal Info";
+}
+
+<h2>Edit Personal Info</h2>
+<hr />
+@using (Html.BeginForm("ChangePersonalInfo", "Manage", FormMethod.Post, new {role="form", enctype = "multipart/form-data", @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <input type="submit" class="btn btn-default" value="Update" style="border: 0 !important; display: block !important; height: 0 !important; margin: 0 !important; overflow: visible !important; padding: 0 !important; width: 0 !important;" />
+    <div class="form-group">
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PostedPicture, new { @class = "form-control", placeholder = "Display Picture", type = "file", accept = "image/*", id = "picture" })
+            @if (Model.Picture?.Length > 0)
+            {
+                <img id="pictureDispalay" src="data:image/jpeg;base64, @Model.Picture" class="col-lg-7 col-md-7" alt="Chose Display Picture..." />
+            }
+            else
+            {
+                <img id="pictureDispalay" src="../../Resources/placeholder.jpg" alt="Chose Display Picture..." />
+            }
+            <button id="chosePicture">Chose picture</button>
+        </div>
+        @Html.ValidationMessageFor(m => m.PostedPicture, "", new { @class = "text-danger" })
+
+    </div>
+    <div class="form-group">
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = "First Name" })
+        </div>
+        @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+
+
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = "Last Name" })
+        </div>
+        @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+
+
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Update" />
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/App/Pictures")
+}

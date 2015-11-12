@@ -48,14 +48,14 @@ namespace ReviewStartup
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<User>(manager)
             {
-                AllowOnlyAlphanumericUserNames = false,
+                AllowOnlyAlphanumericUserNames = true,
                 RequireUniqueEmail = true
             };
 
             // Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 2,
+                RequiredLength = 6,
                 RequireNonLetterOrDigit = false,
                 RequireDigit = false,
                 RequireLowercase = false,
@@ -96,6 +96,16 @@ namespace ReviewStartup
         public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)
             : base(userManager, authenticationManager)
         {
+        }
+
+        public override Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
+        {
+            var user = UserManager.FindByEmail(userName);
+            if (user != null)
+            {
+                userName = user.UserName;
+            }
+            return base.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
         }
 
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(User user)

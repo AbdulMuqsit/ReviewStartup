@@ -1,28 +1,59 @@
-﻿@model ReviewStartup.Models.IndexViewModel
+﻿@model ReviewStartup.Models.UserManageViewModel
 @{
-    ViewBag.Title = "Manage";
+    ViewBag.Title = "Personal Info";
 }
 
 <h2>@ViewBag.Title.</h2>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
-    <h4>Change your account settings</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>Password:</dt>
-        <dd>
-            [
-            @if (Model.HasPassword)
+    <div class="container personal-info">
+
+        <div class="row">
+            @if (@Model.Picture?.Length>0)
             {
-                @Html.ActionLink("Change your password", "ChangePassword")
+                <img src="data:image/jpeg;base64, @Model.Picture" class="col-lg-7 col-md-7"/>
+
             }
             else
             {
-                @Html.ActionLink("Create", "SetPassword")
+                <img src="../../Resources/placeholder.jpg" class="col-lg-7 col-md-7"/>
+
             }
-            ]
-        </dd>
-      
-    </dl>
+            <a class="col-lg-1 col-md-1" href="@Url.Action("ChangePersonalInfo")"><span class="glyphicon glyphicon-edit"> </span>Edit</a>
+
+        </div>
+        <div class="row">
+            <h4 class="col-lg-2 col-md-2">User Name</h4>
+            <span class="col-lg-5 col-md-5">@Model.Username</span>
+
+        </div>
+        <div class="row">
+            <h4 class="col-lg-2 col-md-2">Email</h4>
+            <span class="col-lg-5 col-md-5">@Model.Email</span>
+
+        </div>
+        <div class="row">
+            <h4 class="col-lg-2 col-md-2">First Name</h4>
+            <span class="col-lg-5 col-md-5">@Model.FirstName</span>
+
+        </div>
+        <div class="row">
+            <h4 class="col-lg-2 col-md-2">Last Name</h4>
+            <span class="col-lg-5 col-md-5">@Model.LastName</span>
+            <a class="col-lg-2 col-md-2" href="@Url.Action("ChangePersonalInfo")"><span class="glyphicon glyphicon-edit"> </span>Edit</a>
+
+
+        </div>
+        <div class="row">
+            <h4 class="col-lg-2 col-md-2">Password</h4>
+            <span class="col-lg-5 col-md-5">********</span>
+
+
+            <a class="col-lg-2 col-md-2" href="@(Model.HasPassword ? Url.Action("ChangePassword") : Url.Action("SetPassword"))"><span class="glyphicon glyphicon-edit"> </span>Edit</a>
+
+
+        </div>
+    </div>
 </div>

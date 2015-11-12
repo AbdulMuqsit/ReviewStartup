@@ -1,77 +1,57 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ReviewStartup.Models;
 
 namespace ReviewStartup.Controllers
 {
     [Authorize]
-    public class ManageController : Controller
+    public class ManageController : ControllerBase
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
-
-        public ManageController()
-        {
-        }
-
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-        }
-
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set 
-            { 
-                _signInManager = value; 
-            }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
-
         //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
-                : "";
+                message == ManageMessageId.ChangePasswordSuccess
+                    ? "Your password has been changed."
+                    : message == ManageMessageId.SetPasswordSuccess
+                        ? "Your password has been set."
+                        : message == ManageMessageId.SetTwoFactorSuccess
+                            ? "Your two-factor authentication provider has been set."
+                            : message == ManageMessageId.Error
+                                ? "An error has occurred."
+                                : message == ManageMessageId.AddPhoneSuccess
+                                    ? "Your phone number was added."
+                                    : message == ManageMessageId.RemovePhoneSuccess
+                                        ? "Your phone number was removed."
+                                        : message == ManageMessageId.ProfileUpdated
+                                            ? "Your personal Info was updated"
+                                            : "";
 
             var userId = User.Identity.GetUserId();
-            var model = new IndexViewModel
+            var user = await UserManager.FindByIdAsync(userId);
+            var model = new UserManageViewModel
             {
                 HasPassword = HasPassword(),
-                PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
-                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
-                Logins = await UserManager.GetLoginsAsync(userId),
+                PhoneNumber = user.PhoneNumber,
+                Username = user.UserName,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
+            if (user.Picture != null && user.Picture.Length > 0)
+            {
+                model.Picture = Convert.ToBase64String(user.Picture);
+
+            }
             return View(model);
         }
 
@@ -82,13 +62,16 @@ namespace ReviewStartup.Controllers
         public async Task<ActionResult> RemoveLogin(string loginProvider, string providerKey)
         {
             ManageMessageId? message;
-            var result = await UserManager.RemoveLoginAsync(User.Identity.GetUserId(), new UserLoginInfo(loginProvider, providerKey));
+            var result =
+                await
+                    UserManager.RemoveLoginAsync(User.Identity.GetUserId(),
+                        new UserLoginInfo(loginProvider, providerKey));
             if (result.Succeeded)
             {
                 var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                 if (user != null)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    await SignInManager.SignInAsync(user, false, false);
                 }
                 message = ManageMessageId.RemoveLoginSuccess;
             }
@@ -140,7 +123,7 @@ namespace ReviewStartup.Controllers
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             if (user != null)
             {
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await SignInManager.SignInAsync(user, false, false);
             }
             return RedirectToAction("Index", "Manage");
         }
@@ -155,7 +138,7 @@ namespace ReviewStartup.Controllers
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             if (user != null)
             {
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await SignInManager.SignInAsync(user, false, false);
             }
             return RedirectToAction("Index", "Manage");
         }
@@ -166,7 +149,9 @@ namespace ReviewStartup.Controllers
         {
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
             // Send an SMS through the SMS provider to verify the phone number
-            return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
+            return phoneNumber == null
+                ? View("Error")
+                : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
         }
 
         //
@@ -179,13 +164,14 @@ namespace ReviewStartup.Controllers
             {
                 return View(model);
             }
-            var result = await UserManager.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code);
+            var result =
+                await UserManager.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code);
             if (result.Succeeded)
             {
                 var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                 if (user != null)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    await SignInManager.SignInAsync(user, false, false);
                 }
                 return RedirectToAction("Index", new { Message = ManageMessageId.AddPhoneSuccess });
             }
@@ -206,7 +192,7 @@ namespace ReviewStartup.Controllers
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             if (user != null)
             {
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await SignInManager.SignInAsync(user, false, false);
             }
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
@@ -228,13 +214,14 @@ namespace ReviewStartup.Controllers
             {
                 return View(model);
             }
-            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+            var result =
+                await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
                 var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                 if (user != null)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    await SignInManager.SignInAsync(user, false, false);
                 }
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
@@ -263,7 +250,7 @@ namespace ReviewStartup.Controllers
                     var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                     if (user != null)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        await SignInManager.SignInAsync(user, false, false);
                     }
                     return RedirectToAction("Index", new { Message = ManageMessageId.SetPasswordSuccess });
                 }
@@ -279,16 +266,21 @@ namespace ReviewStartup.Controllers
         public async Task<ActionResult> ManageLogins(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : "";
+                message == ManageMessageId.RemoveLoginSuccess
+                    ? "The external login was removed."
+                    : message == ManageMessageId.Error
+                        ? "An error has occurred."
+                        : "";
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             if (user == null)
             {
                 return View("Error");
             }
             var userLogins = await UserManager.GetLoginsAsync(User.Identity.GetUserId());
-            var otherLogins = AuthenticationManager.GetExternalAuthenticationTypes().Where(auth => userLogins.All(ul => auth.AuthenticationType != ul.LoginProvider)).ToList();
+            var otherLogins =
+                AuthenticationManager.GetExternalAuthenticationTypes()
+                    .Where(auth => userLogins.All(ul => auth.AuthenticationType != ul.LoginProvider))
+                    .ToList();
             ViewBag.ShowRemoveButton = user.PasswordHash != null || userLogins.Count > 1;
             return View(new ManageLoginsViewModel
             {
@@ -304,7 +296,8 @@ namespace ReviewStartup.Controllers
         public ActionResult LinkLogin(string provider)
         {
             // Request a redirect to the external login provider to link a login for the current user
-            return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage"), User.Identity.GetUserId());
+            return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage"),
+                User.Identity.GetUserId());
         }
 
         //
@@ -317,39 +310,75 @@ namespace ReviewStartup.Controllers
                 return RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
             }
             var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
-            return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
+            return result.Succeeded
+                ? RedirectToAction("ManageLogins")
+                : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
 
-        protected override void Dispose(bool disposing)
+        [HttpGet]
+        [Authorize(Roles = "Admin, User")]
+        public async Task<ActionResult> ChangePersonalInfo()
         {
-            if (disposing && _userManager != null)
+            var user = await UserManager.FindByNameAsync(User.Identity.Name);
+            var model = new ChangePersonalInfoViewModel
             {
-                _userManager.Dispose();
-                _userManager = null;
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            };
+            if (user.Picture != null && user.Picture.Length > 0)
+            {
+                model.Picture = Convert.ToBase64String(user.Picture);
+
             }
 
-            base.Dispose(disposing);
+            return View(model);
         }
 
-#region Helpers
+        [HttpPost]
+        [Authorize(Roles = "Admin, User")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePersonalInfo(ChangePersonalInfoViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await UserManager.FindByNameAsync(User.Identity.Name);
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            if (model.PostedPicture != null)
+            {
+                using (var stream = model.PostedPicture.InputStream)
+                {
+                    var memoryStream = stream as MemoryStream;
+
+                    if (memoryStream == null)
+                    {
+                        memoryStream = new MemoryStream();
+                        await stream.CopyToAsync(memoryStream);
+                    }
+                    user.Picture = memoryStream.ToArray();
+                }
+            }
+            var result = await UserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", new { message = ManageMessageId.ProfileUpdated });
+            }
+            AddErrors(result);
+            return View(model);
+        }
+
+        #region Helpers
+
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
         private IAuthenticationManager AuthenticationManager
         {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
+            get { return HttpContext.GetOwinContext().Authentication; }
         }
 
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("", error);
-            }
-        }
 
         private bool HasPassword()
         {
@@ -379,9 +408,29 @@ namespace ReviewStartup.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
-            Error
+            Error,
+            ProfileUpdated
         }
 
-#endregion
+        #endregion
+    }
+
+    public class ChangePersonalInfoViewModel
+    {
+        [Display(Name = "Picture")]
+        public string Picture { get; set; }
+
+        [Display(Name = "First Name")]
+        [MinLength(3, ErrorMessage = "{0} must be atleaset {1} characters")]
+        [MaxLength(15, ErrorMessage = "{0} can be at most {1} characters")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Last Name")]
+        [MinLength(3, ErrorMessage = "{0} must be atleaset {1} characters")]
+        [MaxLength(15, ErrorMessage = "{0} can be at most {1} characters")]
+        public string LastName { get; set; }
+
+        [Display(Name = "Picture")]
+        public HttpPostedFileBase PostedPicture { get; set; }
     }
 }

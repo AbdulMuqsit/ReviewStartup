@@ -51,18 +51,32 @@ namespace ReviewStartup.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult> Create([Bind(Include = "MediaPostId,Text,Title,Ratings")] PostReviewViewModle review)
         {
             if (ModelState.IsValid)
             {
+
+                var prod = await Context.MediaPosts.FindAsync(review.MediaPostId);
+                if (User.IsInRole("User"))
+                {
+                    var userId = User.Identity.GetUserId();
+                    if (await Context.MediaPosts.AnyAsync(mediaPost => mediaPost.Id == review.MediaPostId && mediaPost.Reviews.Any(rev => rev.UserId == userId)))
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        return Content("You can review a post only once!");
+                    }
+                }
                 Context.Reviews.Add(new Review() { MediaPostId = review.MediaPostId.Value, Text = review.Text, Title = review.Title, Ratings = review.Ratings.Value, UserId = User.Identity.GetUserId() });
                 await Context.SaveChangesAsync();
+                prod.AverageScore = await Context.Reviews.Where(e => e.MediaPostId == review.MediaPostId).AverageAsync(e => e.Ratings);
+                await Context.SaveChangesAsync();
+
                 return RedirectToAction("Details", "MediaPosts", new { id = review.MediaPostId });
             }
 
 
-            return View("CreateReview",review);
+            return View("CreateReview", review);
         }
 
         //// GET: Reviews/Edit/5
