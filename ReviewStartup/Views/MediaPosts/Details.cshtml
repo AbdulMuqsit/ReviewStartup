@@ -5,10 +5,10 @@
     ViewBag.Title = Model.Post.Title;
 }
 
-<div class="row post">
+<div class=" container row post">
 
 
-    <div class="col-lg-4">
+    <div class="col-lg-offset-2  col-lg-3">
 
         @if (Model.Post.Thumbnail?.Length > 0)
         {
@@ -22,7 +22,7 @@
             <img class="thumb" src="../../Resources/placeholder.png" />
         }
     </div>
-    <div class="col-lg-8">
+    <div class="col-lg-6">
         <h2 class="row">@Model.Post.Title</h2>
 
         @{
@@ -48,8 +48,8 @@
 
 </div>
 <hr />
-<div class="container">
-    <h2 class="row">Reviews</h2>
+<div class="col-lg-offset-2 container">
+    <h2 class="container row">Reviews</h2>
     @foreach (var review in Model.Reviews)
     {
         <div class="row review col-lg-8 col-md-8">
@@ -83,7 +83,7 @@
 @if (!User.Identity.IsAuthenticated || User.IsInRole("Admin") || (User.IsInRole("User") && ViewBag.CanReview))
 {
 
-    <div class="container">
+    <div class="col-lg-offset-2 container">
         <h2 class="row">Add your own review</h2>
         <div class="row">
             @{

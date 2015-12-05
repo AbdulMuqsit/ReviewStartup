@@ -81,6 +81,10 @@
     <Compile Include="Migrations\201511031252287_UserFirstLastName.Designer.cs">
       <DependentUpon>201511031252287_UserFirstLastName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511221923382_Friends.cs" />
+    <Compile Include="Migrations\201511221923382_Friends.Designer.cs">
+      <DependentUpon>201511221923382_Friends.cs</DependentUpon>
+    </Compile>
     <Compile Include="ReviewsStartupDbContext.cs" />
     <Compile Include="Migrations\201510221526087_Init.cs" />
     <Compile Include="Migrations\201510221526087_Init.Designer.cs">
@@ -121,6 +125,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511031252287_UserFirstLastName.resx">
       <DependentUpon>201511031252287_UserFirstLastName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511221923382_Friends.resx">
+      <DependentUpon>201511221923382_Friends.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

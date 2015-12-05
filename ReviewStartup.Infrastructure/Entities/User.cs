@@ -21,5 +21,8 @@ namespace ReviewStartup.Infrastructure.Entities
         public ICollection<Review> Reviews { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
+        public ICollection<User> Friends { get; set; }
+        public ICollection<User> FriendRequests { get; set; }
+
     }
 }

@@ -10,7 +10,10 @@ namespace ReviewStartup
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
-
+            bundles.Add(new ScriptBundle("~/bundles/scroll").Include(
+                        "~/Scripts/jquery.mCustomScrollbar.js"));
+            bundles.Add(new ScriptBundle("~/bundles/thirdParty").Include(
+                        "~/Scripts/toastr.js"));
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
@@ -25,10 +28,11 @@ namespace ReviewStartup
             bundles.Add(new ScriptBundle("~/bundles/App/Pictures").Include(
                      "~/Scripts/App/picture.js"));
             bundles.Add(new ScriptBundle("~/bundles/App").Include(
-                    "~/Scripts/App/search.js"));
+                    "~/Scripts/App/*.js"));
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css", "~/Content/jquery.mCustomScrollbar.css", "~/Content/toastr.css"));
+
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace ReviewStartup.Infrastructure.Entities
 {
     public enum MediaType
     {
         [Display(Name = "Movie")]
+
         Movie,
         [Display(Name = "Video Game")]
         VideoGame,

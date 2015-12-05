@@ -1,191 +1,259 @@
-﻿@using System.Drawing
-@model ReviewStartup.Controllers.PostSummaryViewModel
+﻿@model ReviewStartup.Controllers.HomeIndexViewModel
 
 @{
     ViewBag.Title = "Home Page";
+    var optionalClass = string.Empty;
     ViewBag.BaseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
 }
 
-<div class="jumbotron">
-    <img src="https://placeholdit.imgix.net/~text?txtsize=75&txt=Media+Trend+Details+To+Be+Implemented+Here&w=1000&h=300" height="300" alt="banner" />
-</div>
-<div class="featured-content row">
-    <div class="media-group col-xs-6 col-sm-4 col-md-4 col-lg-3">
+<div class="row">
 
-
-        <h2>Movies</h2>
-        @{
-            var rand = new Random();
-            foreach (var movie in Model.Movies)
-            {
-                var source = string.Empty;
-                if (movie.Thumbnail?.Length > 0)
+    <div class="col-sm-0 col-md-2">
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            <div class="friend-area">
+                @if (Model.Friends.Any() || Model.FriendRequests.Any())
                 {
-                    source = ViewBag.BaseUrl + "/Images/Thumbnail/" + movie.Id;
+                    if (Model.FriendRequests.Any())
+                    {
+                        <span class="row col-md-12 friends-header">Friend Requests</span>
+                        <div class="row col-md-12 friend-requests">
+
+
+
+                            @foreach (var friend in Model.FriendRequests)
+                            {<div class="friend-request">
+                                <a class="row col-md-12" href="@Url.Action("Details", "Users", new {userName = friend.UserName}, null)">
+                                    <div class="col-md-3">
+                                        @if (friend.Picture != null)
+                                        {
+                                            <img class="displayThumbnail friend-thumbnail" src="data:image/jpeg;base64, @friend.Picture" />
+                                        }
+                                        else
+                                        {
+                                            <img class="displayThumbnail friend-thumbnail" src="../../Resources/placeholder.jpg" />
+                                        }
+
+                                    </div>
+                                    <span class="col-md-9">@friend.UserName</span>
+                                    <div></div>
+                                </a>
+                                <div class="col-md-12 row request-options">
+                                    @Html.ActionLink("Accept", "AcceptRequest", "Friends", new { userName = Url.Encode(@friend.UserName) }, new
+                               {
+                                   @class = "accept-reject accept",
+
+                               })
+                                    @Html.ActionLink("Reject", "RejectRequest", "Friends", new { userName = Url.Encode(@friend.UserName) }, new { @class = "accept-reject reject" })
+
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        <span class="row col-md-12 friends-header" style="margin-top: 0;">Friends</span>
+                    }
+                    <div class="row col-md-12 friends">
+                        @foreach (var friend in Model.Friends)
+                    {
+                            <a class="row col-md-4 friend" href="@Url.Action("Details", "Users", new {userName = friend.UserName}, null)">
+                                <div class="dropdown-toggle col-md-3">
+                                    @if (friend.Picture != null)
+                                    {
+                                        <img class="displayThumbnail friend-thumbnail" src="data:image/jpeg;base64, @friend.Picture" />
+                                    }
+                                    else
+                                    {
+                                        <img class="displayThumbnail friend-thumbnail" src="../../Resources/placeholder.jpg" />
+                                    }
+
+                                </div>
+
+                                <span class="col-md-9">@friend.UserName</span>
+                            </a>
+                        }
+                    </div>
                 }
                 else
                 {
-                    source = "../../Resources/placeholder.png";
-
+                    <span class="row col-md-12 friends-header" style="margin-top: 0;">Add Some frineds!</span>
                 }
-
-                <div class="row">
-                    <img src=@source alt="image">
-                    <div>
-                        @Html.ActionLink(movie.Title, "Details", "MediaPosts", new { id = movie.Id }, new { @class = "row" })
-                        @{
-                            var _class =
-                            String.Empty;
-                            if (@movie.AverageScore > 7)
-                            {
-                                _class = "good-review";
-                            }
-                            else if (@movie.AverageScore > 5)
-                            {
-                                _class = "average-review";
-                            }
-                            else
-                            {
-                                _class = "bad-review";
-                            }
-                            <span class="row @_class">@movie.AverageScore.ToString("F1")</span>
-                        }
-                    </div>
-                </div>
-                            }
-        }
-
-    </div>
-    <div class="media-group col-xs-6 col-sm-4 col-md-4 col-lg-3">
-        <h2>Tv Shows</h2>
-
-        @{
-
-            foreach (var tvShow in Model.TvShow)
-            {
-                var source = string.Empty;
-                if (tvShow.Thumbnail?.Length > 0)
-                {
-                    source = ViewBag.BaseUrl + "/Images/Thumbnail/" + tvShow.Id;
-                }
-                else
-                {
-
-                    source = "../../Resources/placeholder.png";
-                }
-
-                <div class="row">
-                    <img src=@source alt="image">
-                    <div>
-                        @Html.ActionLink(tvShow.Title, "Details", "MediaPosts", new { id = tvShow.Id }, new { @class = "row" })
-                        @{
-                            var _class =
-                            String.Empty;
-                            if (@tvShow.AverageScore > 7)
-                            {
-                                _class = "good-review";
-                            }
-                            else if (@tvShow.AverageScore > 5)
-                            {
-                                _class = "average-review";
-                            }
-                            else
-                            {
-                                _class = "bad-review";
-                            }
-                            <span class="row @_class">@tvShow.AverageScore.ToString("F1")</span>
-                        }
-                    </div>
-                </div>
-                            }
+            </div>
         }
     </div>
-    <div class="media-group col-xs-6 col-sm-4 col-md-4 col-lg-3">
-        <h2>Games</h2>
 
-        @{
-
-            foreach (var game in Model.VideoGames)
-            {
-                var source = string.Empty;
-                if (game.Thumbnail?.Length > 0)
+    <div class="row featured-content  col-md-8 col-sm-12 ">
+        <div class="media-group col-xs-6 col-sm-4 col-md-4 col-lg-3">
+            <h2>Movies</h2>
+            @{
+                var rand = new Random();
+                foreach (var movie in Model.Movies)
                 {
-                    source = ViewBag.BaseUrl + "/Images/Thumbnail/" + game.Id;
-                }
-                else
-                {
-                    source = "../../Resources/placeholder.png";
+                    var source = string.Empty;
+                    if (movie.Thumbnail?.Length > 0)
+                    {
+                        source = ViewBag.BaseUrl + "/Images/Thumbnail/" + movie.Id;
+                    }
+                    else
+                    {
+                        source = "../../Resources/placeholder.png";
+                    }
 
-                }
-
-                <div class="row">
-                    <img src=@source alt="image">
-                    <div>
-                        @Html.ActionLink(game.Title, "Details", "MediaPosts", new { id = game.Id }, new { @class = "row" })
-                        @{
-                            var _class =
-                            String.Empty;
-                            if (@game.AverageScore > 7)
-                            {
-                                _class = "good-review";
+                    <div class="row">
+                        <img src=@source alt="image">
+                        <div>
+                            @Html.ActionLink(movie.Title, "Details", "MediaPosts", new { id = movie.Id }, new { @class = "row" })
+                            @{
+                                var _class =
+                                    string.Empty;
+                                if (@movie.AverageScore > 7)
+                                {
+                                    _class = "good-review";
+                                }
+                                else if (@movie.AverageScore > 5)
+                                {
+                                    _class = "average-review";
+                                }
+                                else
+                                {
+                                    _class = "bad-review";
+                                }
+                                <span class="row @_class">@movie.AverageScore.ToString("F1")</span>
                             }
-                            else if (@game.AverageScore > 5)
-                            {
-                                _class = "average-review";
-                            }
-                            else
-                            {
-                                _class = "bad-review";
-                            }
-                            <span class="row @_class">@game.AverageScore.ToString("F1")</span>
-                        }
+                        </div>
                     </div>
-                </div>
-                            }
-        }
-    </div>
-    <div class="media-group col-xs-6 col-sm-4 col-md-4 col-lg-3">
-        <h2>Music</h2>
+                                }
+            }
 
-        @{
+        </div>
+        <div class="media-group col-xs-6 col-sm-4 col-md-4 col-lg-3">
+            <h2>Tv Shows</h2>
 
-            foreach (var music in Model.Music)
-            {
-                var source = string.Empty;
-                if (music.Thumbnail?.Length > 0)
+            @{
+
+                foreach (var tvShow in Model.TvShow)
                 {
-                    source = ViewBag.BaseUrl + "/Images/Thumbnail/" + music.Id;
-                }
-                else
-                {
-                    source = "../../Resources/placeholder.png";
+                    var source = string.Empty;
+                    if (tvShow.Thumbnail?.Length > 0)
+                    {
+                        source = ViewBag.BaseUrl + "/Images/Thumbnail/" + tvShow.Id;
+                    }
+                    else
+                    {
+                        source = "../../Resources/placeholder.png";
+                    }
 
-                }
-
-                <div class="row">
-                    <img src=@source alt="image">
-                    <div>
-                        @Html.ActionLink(music.Title, "Details", "MediaPosts", new { id = music.Id }, new { @class="row" })
-                        @{
-                            var _class =
-                            String.Empty;
-                            if (@music.AverageScore > 7)
-                            {
-                                _class = "good-review";
+                    <div class="row">
+                        <img src=@source alt="image">
+                        <div>
+                            @Html.ActionLink(tvShow.Title, "Details", "MediaPosts", new { id = tvShow.Id }, new { @class = "row" })
+                            @{
+                                var _class =
+                                    string.Empty;
+                                if (@tvShow.AverageScore > 7)
+                                {
+                                    _class = "good-review";
+                                }
+                                else if (@tvShow.AverageScore > 5)
+                                {
+                                    _class = "average-review";
+                                }
+                                else
+                                {
+                                    _class = "bad-review";
+                                }
+                                <span class="row @_class">@tvShow.AverageScore.ToString("F1")</span>
                             }
-                            else if (@music.AverageScore > 5)
-                            {
-                                _class = "average-review";
-                            }
-                            else
-                            {
-                                _class = "bad-review";
-                            }
-                            <span class="row @_class">@music.AverageScore.ToString("F1")</span>
-                        }
+                        </div>
                     </div>
-                </div>
+                                }
+            }
+        </div>
+        <div class="media-group col-xs-6 col-sm-4 col-md-4 col-lg-3">
+            <h2>Games</h2>
+
+            @{
+
+                foreach (var game in Model.VideoGames)
+                {
+                    var source = string.Empty;
+                    if (game.Thumbnail?.Length > 0)
+                    {
+                        source = ViewBag.BaseUrl + "/Images/Thumbnail/" + game.Id;
+                    }
+                    else
+                    {
+                        source = "../../Resources/placeholder.png";
+                    }
+
+                    <div class="row">
+                        <img src=@source alt="image">
+                        <div>
+                            @Html.ActionLink(game.Title, "Details", "MediaPosts", new { id = game.Id }, new { @class = "row" })
+                            @{
+                                var _class =
+                                    string.Empty;
+                                if (@game.AverageScore > 7)
+                                {
+                                    _class = "good-review";
+                                }
+                                else if (@game.AverageScore > 5)
+                                {
+                                    _class = "average-review";
+                                }
+                                else
+                                {
+                                    _class = "bad-review";
+                                }
+                                <span class="row @_class">@game.AverageScore.ToString("F1")</span>
                             }
-        }
+                        </div>
+                    </div>
+                                }
+            }
+        </div>
+        <div class="media-group col-xs-6 col-sm-4 col-md-4 col-lg-3">
+            <h2>Music</h2>
+
+            @{
+
+                foreach (var music in Model.Music)
+                {
+                    var source = string.Empty;
+                    if (music.Thumbnail?.Length > 0)
+                    {
+                        source = ViewBag.BaseUrl + "/Images/Thumbnail/" + music.Id;
+                    }
+                    else
+                    {
+                        source = "../../Resources/placeholder.png";
+                    }
+
+                    <div class="row">
+                        <img src=@source alt="image">
+                        <div>
+                            @Html.ActionLink(music.Title, "Details", "MediaPosts", new { id = music.Id }, new { @class = "row" })
+                            @{
+                                var _class =
+                                    string.Empty;
+                                if (@music.AverageScore > 7)
+                                {
+                                    _class = "good-review";
+                                }
+                                else if (@music.AverageScore > 5)
+                                {
+                                    _class = "average-review";
+                                }
+                                else
+                                {
+                                    _class = "bad-review";
+                                }
+                                <span class="row @_class">@music.AverageScore.ToString("F1")</span>
+                            }
+                        </div>
+                    </div>
+                                }
+            }
+        </div>
     </div>
+
 </div>

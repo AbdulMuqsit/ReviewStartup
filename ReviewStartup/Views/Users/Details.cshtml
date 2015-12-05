@@ -1,5 +1,4 @@
-﻿@using System.Drawing
-@model ReviewStartup.Infrastructure.Entities.User
+﻿@model ReviewStartup.Infrastructure.Entities.User
 
 @{
     ViewBag.Title = Model.UserName;
@@ -7,22 +6,46 @@
 
 <div class="row post">
 
+    <div>
+        <div class="row ">
 
-    <div class="col-lg-4">
-
-        @if (Model.Picture?.Length > 0)
-        {
-
+            @if (Model.Picture?.Length > 0)
+            {
                 <img class="thumb" src="@Url.Action("UserThumbnail", "Images", new {userName = Model.UserName})" />
-        }
-        else
+            }
+            else
+            {
+                <img class="thumb" src="../../Resources/placeholder.jpg" />
+            }
+        </div>
+        <div class="row">
+            <span class="row">@Model.UserName</span>
+
+        </div>
+        @if (Request.IsAuthenticated)
         {
-            <img class="thumb" src="../../Resources/placeholder.jpg" />
+            <div class="row">
+
+                @if (Model.Friends.Any(e => e.UserName == User.Identity.Name))
+                {
+                    @Html.ActionLink("Remove Friend", "RemoveFriend", "Friends", new { userName = Model.UserName }, new { @class = "accept-reject", id = "remove" })
+                }
+                else if (Model.FriendRequests.Any(e => e.UserName == User.Identity.Name))
+                {
+
+                    @Html.ActionLink("Cancel Request", "CancelRequest", "Friends", new { userName = Model.UserName }, new { @class = "accept-reject", id = "cancel" })
+                }
+                else if (ViewBag.FriendRequestReceived)
+                {
+                    @Html.ActionLink("Accept Request", "AcceptRequest", "Friends", new { userName = Model.UserName }, new { @class = "accept-reject accept" })
+                    @Html.ActionLink("Remove Request", "RejectRequest", "Friends", new { userName = Model.UserName }, new { @class = "accept-reject reject" })
+                }
+
+                else
+                {
+                    @Html.ActionLink("Add Friend", "SendRequest", "Friends", new { userName = Model.UserName }, new { @class = "accept-reject", id = "add" })
+                }
+            </div>
         }
     </div>
-    <div class="col-lg-8">
-        <h2 class="row">@Model.UserName</h2>
-
-    </div>
-
 </div>
