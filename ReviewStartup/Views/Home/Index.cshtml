@@ -91,7 +91,7 @@
                     var source = string.Empty;
                     if (movie.Thumbnail?.Length > 0)
                     {
-                        source = ViewBag.BaseUrl + "/Images/Thumbnail/" + movie.Id;
+                        source = Url.Action("Thumbnail", "Images", new {id = movie.Id});
                     }
                     else
                     {
@@ -135,7 +135,7 @@
                     var source = string.Empty;
                     if (tvShow.Thumbnail?.Length > 0)
                     {
-                        source = ViewBag.BaseUrl + "/Images/Thumbnail/" + tvShow.Id;
+                        source = Url.Action("Thumbnail", "Images", new { id = tvShow.Id }); ;
                     }
                     else
                     {
@@ -178,7 +178,7 @@
                     var source = string.Empty;
                     if (game.Thumbnail?.Length > 0)
                     {
-                        source = ViewBag.BaseUrl + "/Images/Thumbnail/" + game.Id;
+                        source = Url.Action("Thumbnail", "Images", new { id = game.Id }); ;
                     }
                     else
                     {
@@ -221,7 +221,7 @@
                     var source = string.Empty;
                     if (music.Thumbnail?.Length > 0)
                     {
-                        source = ViewBag.BaseUrl + "/Images/Thumbnail/" + music.Id;
+                        source = Url.Action("Thumbnail", "Images", new { id = music.Id }); ;
                     }
                     else
                     {
